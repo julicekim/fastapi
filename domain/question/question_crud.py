@@ -1,17 +1,33 @@
 # question_crud.py
+from datetime import datetime
+
+from domain.question.question_schema import QuestionCreate
+from models import Question
 from sqlalchemy.orm import Session
 
-from models import Question
 
+def get_question_list(db: Session, skip: int = 0, limit: int = 10):
+    _questions = db.query(Question) \
+        .order_by(Question.create_date.desc())
 
-def get_question_list(db: Session):
-    questions = db.query(Question) \
-        .order_by(Question.create_date.desc()) \
-        .all()
+    total = _questions.count()
 
-    return questions
+    questions = _questions.offset(skip).limit(limit).all()
+
+    return total, questions
 
 
 def get_question(db: Session, question_id: int):
     question = db.query(Question).get(question_id)
     return question
+
+
+def create_question(db: Session, question_create: QuestionCreate):
+    question = Question(
+        subject=question_create.subject,
+        content=question_create.content,
+        create_date=datetime.now()
+    )
+
+    db.add(question)
+    db.commit()

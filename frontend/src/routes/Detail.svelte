@@ -1,6 +1,10 @@
 <script>
   import fastapi from "../lib/api";
   import Error from "../components/Error.svelte"
+  import { push } from "svelte-spa-router"
+  import moment from 'moment/min/moment-with-locales'
+
+  moment.locale('ko')
 
   export let params = {}
 
@@ -48,18 +52,21 @@
       </div>
       <div class="d-flex justify-content-end">
         <div class="badge bg-light text-dark p-2">
-          {question.create_date}
+          {moment(question.create_date).format("YYYY년MM월DD일 hh:mm a")}
         </div>
       </div>
     </div>
   </div>
+
+  <button class="btn btn-secondary" on:click="{() => push('/')}">목록으로</button>
+
   <h6 class="border-bottom my-3 py-2">{question.answers.length} 개의 답변이 있습니다.</h6>
   {#each question.answers as answer}
   <div class="card my-3">
       <div class="card-body">
         <div class="card-text" style="white-space: pre-line;">{answer.content}</div>
         <div class="d-flex justify-content-end">
-          <div class="badge bg-light text-dark p-2">${answer.create_date}</div>
+          <div class="badge bg-light text-dark p-2">{moment(answer.create_date).format("YYYY년 MM월 DD일 hh:mm a")}</div>
         </div>
       </div>
     </div>
