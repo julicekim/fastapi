@@ -4,6 +4,7 @@ from sqlalchemy.orm import backref, relationship
 
 from database import Base
 
+
 class Question(Base):
     __tablename__ = "question"
 
@@ -11,6 +12,7 @@ class Question(Base):
     subject = Column(String, nullable=False)
     content = Column(Text, nullable=False)
     create_date = Column(DateTime, nullable=False)
+
 
 class Answer(Base):
     __tablename__ = "answer"
