@@ -2,7 +2,7 @@
 from datetime import datetime
 
 from domain.question.question_schema import QuestionCreate
-from models import Question
+from models import Question, User
 from sqlalchemy.orm import Session
 
 
@@ -22,11 +22,14 @@ def get_question(db: Session, question_id: int):
     return question
 
 
-def create_question(db: Session, question_create: QuestionCreate):
+def create_question(db: Session,
+                    question_create: QuestionCreate,
+                    user: User):
     question = Question(
         subject=question_create.subject,
         content=question_create.content,
-        create_date=datetime.now()
+        create_date=datetime.now(),
+        user=user
     )
 
     db.add(question)

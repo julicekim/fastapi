@@ -1,6 +1,7 @@
 <script> 
   import { link } from "svelte-spa-router"
-  import { page } from "../lib/store"
+    import App from "../App.svelte";
+  import { page, access_token, username, is_login } from "../util/store"
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom"> 
@@ -18,12 +19,22 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0"> 
+        {#if $is_login }
+          <li class="nav-item">
+            <a user:link href="/user-login" class="nav-link" on:click={() => {
+              $access_token = ''
+              $username = ''
+              $is_login = false
+            }}>로그아웃 ( {$username} )</a>
+          </li>
+        {:else}
         <li class="nav-item"> 
           <a use:link class="nav-link" href="/user-create">회원가입</a>
         </li>
         <li class="nav-item"> 
           <a use:link href="/user-login" class="nav-link">로그인</a>
         </li>
+        {/if}
       </ul>
     </div>
   </div>

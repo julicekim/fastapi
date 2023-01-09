@@ -1,7 +1,7 @@
 <script>
-  import fastapi from "../lib/api"
+  import fastapi from "../util/api"
+  import { page, is_login } from "../util/store"
   import { link } from 'svelte-spa-router'
-  import { page } from "../lib/store"
   import moment from 'moment/min/moment-with-locales'
 
   moment.locale('ko')
@@ -67,5 +67,5 @@
       <button class="page-link" on:click="{() => get_question_list($page + 1)}">다음</button>
     </li>
   </ul>
-  <a use:link href="/question-create" class="btn btn-primary">질문 등록하기</a>
+  <a use:link href="/question-create" class="btn btn-primary {$is_login ? '': 'disabled'}">질문 등록하기</a>
 </div>
