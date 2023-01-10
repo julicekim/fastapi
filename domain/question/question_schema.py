@@ -1,8 +1,10 @@
 # question_schema.py
 import datetime
+from typing import Optional
 
 from pydantic import BaseModel, validator
 from domain.answer.answer_schema import Answer
+from domain.user.user_schema import User
 
 
 class Question(BaseModel):
@@ -14,6 +16,8 @@ class Question(BaseModel):
     content: str
     create_date: datetime.datetime
     answers: list[Answer] = []
+    user: Optional[User]
+    modify_date: Optional[datetime.datetime]
 
     class Config:
         orm_mode = True
@@ -33,3 +37,11 @@ class QuestionCreate(BaseModel):
 class QuestionList(BaseModel):
     total: int = 0
     question_list: list[Question] = []
+
+
+class QuestionUpdate(QuestionCreate):
+    question_id: int
+
+
+class QuestionDelete(BaseModel):
+    question_id: int
