@@ -2,19 +2,34 @@
 from datetime import datetime
 
 from domain.question.question_schema import QuestionCreate, QuestionUpdate
-from models import Question, User
+from models import Question, User, Answer
 from sqlalchemy.orm import Session
 
 
-def get_question_list(db: Session, skip: int = 0, limit: int = 10):
-    _questions = db.query(Question) \
-        .order_by(Question.create_date.desc())
+def get_question_list(db: Session, skip: int = 0, limit: int = 10, keyword: str = ''):
+    question_list = db.query(Question)
 
-    total = _questions.count()
+    if keyword:
 
-    questions = _questions.offset(skip).limit(limit).all()
+        search = '%%{}%%'.format(keyword)
+        sub_query = db.query(Answer.question_id, Answer.content, User.username) \
+            .outerjoin(User, Answer.user_id == User.id).subquery()
 
-    return total, questions
+        question_list = question_list \
+            .outerjoin(User) \
+            .outerjoin(sub_query, sub_query.c.question_id == Question.id) \
+            .filter(Question.subject.ilike(search) |
+                    Question.content.ilike(search) |
+                    User.username.ilike(search) |
+                    sub_query.c.content.ilike(search) |
+                    sub_query.c.username.ilike(search)
+                    )
+
+    total = question_list.count()
+    question_list = question_list.order_by(Question.create_date.desc()) \
+        .offset(skip).limit(limit).distinct().all()
+
+    return total, question_list
 
 
 def get_question(db: Session, question_id: int):

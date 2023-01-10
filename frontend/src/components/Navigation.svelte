@@ -1,12 +1,12 @@
 <script> 
   import { link } from "svelte-spa-router"
-    import App from "../App.svelte";
-  import { page, access_token, username, is_login } from "../util/store"
+  import App from "../App.svelte";
+  import { page, keyword, access_token, username, is_login } from "../util/store"
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom"> 
   <div class="container-fluid"> 
-    <a use:link href="/" class="navbar-brand" on:click="{() => {$page = 0}}">Pybo</a>
+    <a use:link href="/" class="navbar-brand" on:click="{() => {$keyword = '', $page = 0}}">Pybo</a>
     <button 
       class="navbar-toggler" 
       type="button"
