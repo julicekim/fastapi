@@ -18,6 +18,7 @@ class Question(BaseModel):
     answers: list[Answer] = []
     user: Optional[User]
     modify_date: Optional[datetime.datetime]
+    voter: list[User] = []
 
     class Config:
         orm_mode = True
@@ -44,4 +45,8 @@ class QuestionUpdate(QuestionCreate):
 
 
 class QuestionDelete(BaseModel):
+    question_id: int
+
+
+class QuestionVote(BaseModel):
     question_id: int
